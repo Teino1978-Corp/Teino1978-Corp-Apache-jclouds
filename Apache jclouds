@@ -1,0 +1,12 @@
+ComputeService compute = ContextBuilder.newBuilder("aws-ec2")
+    .credentials("identity", "credential")
+    .buildView(ComputeServiceContext.class)
+    .getComputeService();
+
+Template template = compute.templateBuilder()
+    .osFamily(OsFamily.UBUNTU)
+    .minRam(2048)
+    .options(inboundPorts(22, 80))
+    .build();
+
+compute.createNodesInGroup("jclouds", 1, template);
